@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import {getStorage, uploadBytesResumable,ref, getDownloadURL} from 'firebase/storage';
 import {app} from '../firebase';
 import { useDispatch } from 'react-redux';
-import { updateUserStart,updateUserFailure,updateUserSuccess } from '../redux/user/userSlice';
+import { updateUserStart,updateUserFailure,updateUserSuccess,deleteUserFailure,deleteUserStart,deleteUserSuccess,signOut } from '../redux/user/userSlice';
 
 
 export default function Profile() {
@@ -68,6 +68,31 @@ export default function Profile() {
       dispatch(updateUserFailure(error));
     }
   }
+  const handleDeleteAcount = async()=>{
+    try {
+      dispatch(deleteUserStart())
+      const res = await fetch(`/backend/user/delete/${currentUser._id}`,{
+        method:'DELETE',
+      });
+      const data = await res.json();
+      if(data.success === false){
+        dispatch(deleteUserFailure(data));
+        return;
+      }
+      dispatch(deleteUserSuccess(data));
+    } catch (error) {
+      dispatch(deleteUserFailure(error));
+    }
+  }
+  const handleSignout = async() =>{
+    try{
+
+      await fetch('/backend/auth/signout');
+      dispatch(signOut())
+    }catch(error){
+      console.log(error);
+    }
+  }
   return (
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl font-semibold text-center my-7'>Profile</h1>
@@ -92,8 +117,8 @@ export default function Profile() {
         <button className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'>{loading?'Loading...' : 'Update'}</button>
       </form>
       <div className='flex justify-between mt-5'>
-        <span className='text-red-700 cursor-pointer'>Delete Account</span>
-        <span className='text-red-700 cursor-pointer'>Sign out</span>
+        <span onClick={handleDeleteAcount} className='text-red-700 cursor-pointer'>Delete Account</span>
+        <span onClick={handleSignout} className='text-red-700 cursor-pointer'>Sign out</span>
       </div>
       <p className='text-red-700 mt-5'>{error && "something went wrong!"}</p>
       <p className='text-green-700 mt-5'>{updateSuccess && "User is updated successfully!"}</p>

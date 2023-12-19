@@ -23,10 +23,10 @@ try {
         req.params.id,
         {
             $set: {
-                username:req.body.username,
-                email:req.body.email,
+                username: req.body.username,
+                email: req.body.email,
                 password: req.body.password,
-                profilePicture:req.body.profilePicture,
+                profilePicture: req.body.profilePicture,
             },
         },{
             new: true

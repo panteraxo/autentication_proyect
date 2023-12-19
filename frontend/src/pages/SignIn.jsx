@@ -7,12 +7,11 @@ import OAuth from "../components/OAuth";
 export default function SignIn() {
   const[formData,setFormData]=useState({});
   const {loading,error} = useSelector((state)=> state.user);
-  console.log(loading,error);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleChange = (e)=>{
     setFormData({...formData,[e.target.id]:e.target.value});
-  }
+  };
   
   const handleSubmit = async (e)=>{
     e.preventDefault();
@@ -67,7 +66,7 @@ export default function SignIn() {
           <span className="text-blue-500">Sign up</span>
         </Link>
       </div>
-      <p className="text-red-600 mt-5">{error ? error || 'Something went wrong' : " "}</p>
+      <p className="text-red-600 mt-5">{error ? error.message || 'Something went wrong' : " "}</p>
     </div>
   );
 }

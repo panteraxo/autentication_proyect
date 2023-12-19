@@ -7,7 +7,9 @@ import cookieParser from "cookie-parser";
 import path from "path";
 dotenv.config();
 
-mongoose.connect(process.env.MONGO).then(()=>{
+mongoose
+.connect(process.env.MONGO)
+.then(()=>{
     console.log("connected to MongoDB");
 }).catch((err)=>{
     console.log(err);
@@ -17,7 +19,7 @@ const __dirname = path.resolve();
 
 const app = express();
 
-app.use(express.static(path.join(__dirname,'/frontend/dist')))
+app.use(express.static(path.join(__dirname,'/frontend/dist')));
 
 app.get('*',(req,res)=>{
     res.sendFile(path.join(__dirname,'frontend','dist','index.html'))
